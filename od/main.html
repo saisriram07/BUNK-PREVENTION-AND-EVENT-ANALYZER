@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Events</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        button {
+            background-color: #FF6F61;
+            color: white;
+            padding: 15px 40px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #DB5E54;
+        }
+        .highlight {
+            color: #FF6F61;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function redirectToEventPage() {
+            window.location.href = 'index.html'; // Change the URL to the desired page
+        }
+    </script>
+</head>
+<body>
+    <header>
+        College Events - Join the Excitement!
+    </header>
+    <div class="container">
+        <p>Welcome to the vibrant world of college events! Explore <span class="highlight">exciting opportunities</span> to learn, grow, and have fun with your fellow students.</p>
+        <p>From <span class="highlight">inspiring guest lectures</span> to thrilling <span class="highlight">debate competitions</span> and mesmerizing <span class="highlight">music concerts</span>, there's something for everyone!</p>
+        <p>Don't miss out on the action - <span class="highlight">attend an event</span> today and make unforgettable memories!</p>
+        <button onclick="redirectToEventPage()">Attend an Event</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance System - Final Report</title>
+  <style>
+    /* CSS styles for layout */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .box {
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Options</h2>
+    <div class="box">
+      <h3>Attendance</h3>
+      <!-- Add content related to attendance options -->
+    </div>
+    <div class="box">
+      <h3>Dashboard</h3>
+      <!-- Add content related to dashboard options -->
+    </div>
+    <div class="box">
+      <h3>Reports</h3>
+      <!-- Add content related to reports options -->
+    </div>
+    <div class="box">
+      <h3>Settings</h3>
+      <!-- Add content related to settings options -->
+    </div>
+    <h2>Total Number of Students</h2>
+    <div class="box">
+      <p>Total Number of CSE Students: 1500</p>
+      <p>Total Number of B4 Students: 60</p>
+    </div>
+    <h2>Present Today</h2>
+    <div class="box">
+        <p>Present: <span id="presentCount"></span></p>
+        <p>Absent: <span id="absentCount"></span></p>
+    </div>
+    <h2>Total Number of Classes</h2>
+    <div class="box">
+      <p>Theory: 3</p>
+      <p>Lab: 2</p>
+    </div>
+  </div>
+  <script>
+    // Retrieve present and absent counts from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const presentCount = urlParams.get('present');
+    const absentCount = urlParams.get('absent');
+
+    // Display present and absent counts in the respective spans
+    document.getElementById('presentCount').textContent = presentCount;
+    document.getElementById('absentCount').textContent = absentCount;
+  </script>
+</body>
+</html>

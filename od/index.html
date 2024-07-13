@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Event Registration</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('bg.jpg'); /* Replace 'background.jpg' with your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#header {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    text-align: center;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+}
+
+#addEventBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
+.events-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.event-form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+input[type="text"], input[type="date"], input[type="email"], input[type="tel"], textarea, input[type="button"] {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input[type="button"] {
+    background-color: #008CBA;
+    color: white;
+    cursor: pointer;
+}
+
+.event-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    margin: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+.event-detail {
+    margin-bottom: 10px;
+}
+
+.register-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+    <!-- <div id="header">
+         <img class="logo" src="logo.png" alt="Logo"> Replace 'logo.png' with your logo path -->
+    <!-- </div> --> 
+    <button id="addEventBtn">+</button>
+    <div class="events-container" id="eventsContainer"></div>
+
+<div id="popupForm" class="event-form" style="display: none;">
+    <h2>Register for the Event</h2>
+    <input type="text" id="regNo" placeholder="Registration Number">
+    <input type="text" id="name" placeholder="Name">
+    <input type="email" id="email" placeholder="Email">
+    <input type="tel" id="whatsapp" placeholder="WhatsApp Number">
+    <input type="button" value="Submit" onclick="submitForm()">
+</div>
+
+<script>
+function showPopupForm() {
+    document.getElementById('popupForm').style.display = 'flex';
+}
+
+function submitForm() {
+    const regNo = document.getElementById('regNo').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const whatsapp = document.getElementById('whatsapp').value;
+
+    // You can perform validation here if needed
+
+    // For now, just display the submitted data
+    alert(`Registration Number: ${regNo}\nName: ${name}\nEmail: ${email}\nWhatsApp: ${whatsapp}`);
+
+    // Close the popup form
+    document.getElementById('popupForm').style.display = 'none';
+}
+
+document.getElementById('addEventBtn').addEventListener('click', function() {
+    const container = document.getElementById('eventsContainer');
+    const formDiv = document.createElement('div');
+    formDiv.className = 'event-form';
+    formDiv.innerHTML = `
+        <input type="text" id="eventName" placeholder="Event Name">
+        <input type="date" id="eventDate" placeholder="Event Date">
+        <input type="text" id="eventEligibility" placeholder="Eligibility">
+        <input type="text" id="eventVenue" placeholder="Venue">
+        <textarea id="eventDescription" placeholder="Event Description"></textarea>
+        <input type="button" value="Add Event" onclick="addEvent(this.parentNode)">
+    `;
+    container.appendChild(formDiv);
+
+    // Hide the popup form
+    document.getElementById('popupForm').style.display = 'none';
+});
+
+function addEvent(form) {
+    const name = form.querySelector('#eventName').value;
+    const date = form.querySelector('#eventDate').value;
+    const eligibility = form.querySelector('#eventEligibility').value;
+    const venue = form.querySelector('#eventVenue').value;
+    const description = form.querySelector('#eventDescription').value;
+
+    const container = document.getElementById('eventsContainer');
+    const eventBox = document.createElement('div');
+    eventBox.className = 'event-box';
+    eventBox.innerHTML = `
+        <div class="event-detail"><strong>Name:</strong> ${name}</div>
+        <div class="event-detail"><strong>Date:</strong> ${date}</div>
+        <div class="event-detail"><strong>Eligibility:</strong> ${eligibility}</div>
+        <div class="event-detail"><strong>Venue:</strong> ${venue}</div>
+        <div class="event-detail"><strong>Description:</strong> ${description}</div>
+        <button class="register-btn" onclick="showPopupForm()">Register</button>
+    `;
+
+    container.appendChild(eventBox);
+
+    // Hide the form after creating the event box
+    form.style.display = 'none';
+}
+</script>
+</body>
+</html>

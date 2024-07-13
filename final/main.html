@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance System</title>
+  <style>
+   body {
+  font-family: 'Arial', sans-serif;
+  background-color: white; /* Change background color of the body to white */
+  margin: 20px;
+}
+
+h2 {
+  color: #333;
+  text-align: center;
+}
+
+.attendanceDetails {
+  background-color: #ecf0f1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  background-color: white; /* Change background color of tables to white */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+}
+
+th {
+  background-color: red;
+  color: #fff;
+}
+
+td {
+  background-color: #ecf0f1;
+}
+
+button {
+  background-color: #2ecc71;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #27ae60;
+}
+
+#attendanceReport {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+  display: none;
+}
+
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  width: 400px; /* Adjust width as needed */
+}
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="hlo.jpg" alt="Logo">
+  </div>
+
+  <h2>SMART ATTENDANCE ANALYZER</h2>
+
+  <div class="attendanceDetails">
+    <p>Section: B5</p>
+    <p>Date: <span id="currentDate"></span></p>
+    <p>Class Coordinator: Dr.P.Asha</p>
+  </div>
+
+  <label for="periodSelector">Select Period:</label>
+  <select id="periodSelector" onchange="generateCheckboxes()">
+    <option value="period1">Period 1</option>
+    <option value="period2">Period 2</option>
+    <option value="period3">Period 3</option>
+    <option value="period4">Period 4</option>
+    <option value="period5">Period 5</option>
+  </select>
+
+  <table id="period1" class="hidden">
+    <thead>
+      <tr>
+        <th>Register Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceTableBody1">
+      <!-- Rows for 60 students will be generated dynamically using JavaScript -->
+    </tbody>
+  </table>
+
+  <table id="period2" class="hidden">
+    <thead>
+      <tr>
+        <th>Register Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceTableBody2">
+      <!-- Rows for 60 students will be generated dynamically using JavaScript -->
+    </tbody>
+  </table>
+
+  <table id="period3" class="hidden">
+    <thead 
+      <tr>
+        <th>Register Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceTableBody3">
+      <!-- Rows for 60 students will be generated dynamically using JavaScript -->
+    </tbody>
+  </table>
+
+  <table id="period4" class="hidden">
+    <thead>
+      <tr>
+        <th>Register Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceTableBody4">
+      <!-- Rows for 60 students will be generated dynamically using JavaScript -->
+    </tbody>
+  </table>
+
+  <table id="period5" class="hidden">
+    <thead>
+      <tr>
+        <th>Register Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceTableBody5">
+      <!-- Rows for 60 students will be generated dynamically using JavaScript -->
+    </tbody>
+  </table>
+
+  <button id="submitBtn" class="hidden" onclick="submitAttendance()">Submit Attendance</button>
+
+  <div id="attendanceReport"></div>
+  
+  <button id="viewFinalReportBtn" onclick="viewFinalReport()">View Final Report</button>
+  <!-- Modify the HTML to include a container for all tables -->
+<div id="allPeriodsTables">
+  <!-- Each table will be appended here -->
+</div>
+
+
+
+  <script>
+    const periodsTaken = [];
+    let mainAttendancePeriod = '';
+    let maxAbsences = -1;
+
+    function generateCheckboxes() {
+      const selectedPeriod = document.getElementById('periodSelector').value;
+      if (periodsTaken.includes(selectedPeriod)) {
+        alert("Attendance for this period has already been taken.");
+        return;
+      }
+
+      const allTables = document.querySelectorAll('table');
+      allTables.forEach(table => {
+        table.classList.add('hidden');
+      });
+
+      const selectedTable = document.getElementById(selectedPeriod);
+      selectedTable.classList.remove('hidden');
+
+      document.getElementById('submitBtn').classList.remove('hidden');
+
+      clearCheckboxes();
+    }
+
+    function submitAttendance() {
+  const selectedPeriod = document.getElementById('periodSelector').value;
+  if (periodsTaken.includes(selectedPeriod)) {
+    alert("Attendance for this period has already been taken.");
+    return;
+  }
+
+  const checkboxes = document.querySelectorAll(`#${selectedPeriod} .attendanceCheckbox:checked`);
+  const presentRegisterNumbers = []; // Array to store register numbers of present students
+  
+  checkboxes.forEach(checkbox => {
+    // Get the register number from the parent row of the checkbox
+    const registerNumber = checkbox.parentNode.parentNode.cells[0].textContent;
+    presentRegisterNumbers.push(registerNumber);
+  });
+  
+  // Create or update a section for the selected period
+  let periodSection = document.getElementById(`attendanceFor${selectedPeriod}`);
+  if (!periodSection) {
+    // If the section doesn't exist, create it
+    periodSection = document.createElement('div');
+    periodSection.id = `attendanceFor${selectedPeriod}`;
+    document.body.appendChild(periodSection); // Append the section to the body of the webpage
+  }
+
+  // Display register numbers of present students for the selected period
+  if (presentRegisterNumbers.length > 0) {
+    const presentStudentsMessage = `Register numbers of present students for ${selectedPeriod}: ${presentRegisterNumbers.join(', ')}`;
+    periodSection.textContent = presentStudentsMessage;
+  } else {
+    periodSection.textContent = `No students are present for ${selectedPeriod}.`;
+  }
+
+  const presentCount = checkboxes.length;
+  const absentCount = 60 - presentCount; // Total students per period is 60
+
+  const report = `<h3>Attendance Report for ${selectedPeriod}</h3><p>Present: ${presentCount}, Absent: ${absentCount}</p>`;
+  document.getElementById("attendanceReport").innerHTML += report;
+
+  periodsTaken.push(selectedPeriod);
+  clearCheckboxes();
+
+  // Update main attendance period if necessary
+  if (absentCount > maxAbsences) {
+    mainAttendancePeriod = selectedPeriod;
+    maxAbsences = absentCount;
+  }
+
+  if (periodsTaken.length === 5) {
+    generateFinalReport();
+    saveAttendanceReport(); // Save attendance report to a text file
+  }
+}
+
+
+    function clearCheckboxes() {
+      const checkboxes = document.querySelectorAll('.attendanceCheckbox');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+      });
+    }
+
+    function generateFinalReport() {
+      let finalReport = '';
+      if (maxAbsences === 0) {
+        mainAttendancePeriod = 'period1'; // If all periods have zero absences, consider period 1 as main attendance
+      }
+      finalReport += `<h3>Final Attendance Report</h3><p>Main Attendance Period: ${mainAttendancePeriod}</p>`;
+
+      // Calculate presentees and absentees
+      const presentCount = 60 - maxAbsences;
+      const absentCount = maxAbsences;
+
+      finalReport += `<p>Present: ${presentCount}, Absent: ${absentCount}</p>`;
+
+      document.getElementById("attendanceReport").innerHTML += finalReport;
+    }
+
+    // Set current date
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
+  </script>
+
+  <script>
+    // Generate checkboxes for each period table
+    const periodTables = document.querySelectorAll('table');
+    periodTables.forEach(table => {
+      const period = table.id;
+      const attendanceTableBody = table.querySelector('tbody');
+      let registerNumber = 41110545; // Starting register number
+      for (let i = 1; i <= 60; i++) {
+        // Generating random Indian names
+        const names = ["Rohan", "Aarav", "Aditya", "Sai", "Aryan", "Vihaan", "Ishaan", "Reyansh", "Advik", "Arnav", "Shaurya", "Anay", "Kabir", "Vivaan", "Atharva", "Ayaan", "Dhruv", "Ritvik", "Aarush", "Pranav", "Yuvraj", "Darsh", "Rudra", "Rishit", "Siddhant", "Raghav", "Tanish", "Kian", "Veer", "Yug", "Vihan", "Arjun", "Vihaan", "Nivaan", "Parth", "Mohammed", "Rudransh", "Aayan", "Vihaan", "Rehan", "Krishiv", "Aarav", "Manav", "Samarth", "Arham", "Daksh", "Aadi", "Yash", "Arush", "Arnav", "Vihaan", "Shaurya", "Ritvik", "Vivaan", "Aarav", "Arnav", "Veer", "Yash", "Yuvan", "Rudra", "Aarush", "Pranav", "Atharva"];
+        const randomIndex = Math.floor(Math.random() * names.length);
+        const randomName = names[randomIndex];
+
+        attendanceTableBody.innerHTML += `
+          <tr>
+            <td>${registerNumber++}</td>
+            <td>${randomName}</td>
+            <td><input type="checkbox" class="attendanceCheckbox"></td>
+          </tr>
+        `;
+      }
+    });
+    
+
+  </script>
+  <script>
+    function viewFinalReport() {
+      // Redirect to another HTML page
+      window.location.href = "no.html";
+    }
+  </script>
+  <script>
+    function viewFinalReport() {
+  // Calculate the number of present and absent students
+  const presentCount = 60 - maxAbsences;
+      const absentCount = maxAbsences; // Total students per period is 60
+
+  // Redirect to the final report page with query parameters
+  window.location.href = `no.html?present=${presentCount}&absent=${absentCount}`;
+}
+
+  </script>
+ 
+  
+</body>
+</html>

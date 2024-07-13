@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Summary</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-KyMENI3+mu9v2nVqJ2Mk50qZ2SCi+NYtALkYLkvXRth99vUDSWvJ/od88Vv055EJQvvZ49P16L+X4COzH2CV0A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+ 
+    /* Set background image */
+    background-image: url('hey.jpg');
+    background-size: cover; /* Adjust background image size */
+    background-repeat: no-repeat; /* Prevent background image from repeating */
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .left-column {
+    flex: 1;
+    max-width: 200px;
+    padding-right: 20px;
+    box-sizing: border-box;
+    background-color: white; /* Changed background color */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .left-column h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff; /* Added background color */
+  }
+
+  .left-column ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .left-column li {
+    margin-bottom: 5px;
+  }
+
+  .left-column li a {
+    color: #007bff;
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .left-column li a:last-child {
+    border-bottom: none;
+  }
+
+  .left-column li a:hover {
+    background-color: #f0f0f0;
+  }
+
+  .right-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex: 1;
+    margin-left: 20px; /* Added margin to create a gap */
+  }
+
+  .box {
+    background-color: #fff;
+    border-radius: 10px; /* Adjust border radius for curved boxes */
+    padding: 20px;
+    margin-bottom: 20px;
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  .box i {
+    font-size: 36px;
+    margin-bottom: 10px;
+    color: #666;
+  }
+
+  .box h2 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .box p {
+    font-size: 26px;
+    color: white;
+    margin-bottom: 10px;
+  }
+
+  .box a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .box a:hover {
+    background-color: #f0f0f0;
+  }
+
+  .chart-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .chart {
+    width: 48%; /* Adjust the width to leave some gap between the charts */
+    height: 300px; /* Reduced height */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px; /* Added padding */
+    border-radius: 10px; /* Adjust border radius for curved boxes */
+    overflow: hidden; /* Ensure content doesn't overflow */
+  }
+ 
+
+.box:hover {
+    background-color:green; /* Change to another color on hover */
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="left-column">
+    <h3>Options</h3>
+    <ul>
+      <li><a href="#">Attendance</a></li>
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Reports</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+  </div>
+  <div class="right-container">
+    <div class="box" style="background-color: #ffbb33;">
+      <i class="fa fa-building-o"></i>
+      <h2>TOTAL NUMBER OF CSE STUDENTS</h2>
+      <p>1500</p>
+      <a href="#"></a>
+    </div>
+    <div class="box" style="background-color: #66cc99;">
+      <i class="fa fa-users"></i>
+      <h2>TOTAL NUMBER OF B4 STUDENTS</h2>
+      <p>60</p>
+      <a href="#"></a>
+    </div>
+    <div class="box" style="background-color: #ff6666;">
+      <i class="fa fa-user"></i>
+      <h2>Present Today</h2>
+      <p>Present: <span id="presentCount"></span></p>
+      <p>Absent: <span id="absentCount"></span></p>
+      <a href="#"></a>
+    </div>
+    <div class="box" style="background-color: #9999ff;">
+      <i class="fa fa-desktop"></i>
+      <h2>TOTAL NUMBER OF CLASSES</h2>
+      <p>5</p>
+      <p>THEORY: 3</p>
+      <p>LAB: 2</p>
+      <a href="#"></a>
+    </div>
+  </div>
+</div>
+
+<!-- Chart Section -->
+<div class="chart-container">
+  <div id="barChartContainer" class="chart"></div>
+  <div id="pieChartContainer" class="chart"></div>
+</div>
+
+<!-- Highcharts Library -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<!-- JavaScript for rendering the charts -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Retrieve present and absent counts from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const presentCount = parseInt(urlParams.get('present'));
+    const absentCount = parseInt(urlParams.get('absent'));
+    // Render bar chart
+    Highcharts.chart('barChartContainer', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Attendance Summary'
+      },
+      xAxis: {
+        categories: ['Present', 'Absent']
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Students'
+        }
+      },
+      series: [{
+        name: 'Students',
+        data: [presentCount, absentCount]
+      }]
+    });
+
+    // Render pie chart
+    Highcharts.chart('pieChartContainer', {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: 'Attendance Distribution'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          }
+        }
+      },
+      series: [{
+        name: 'Attendance',
+        colorByPoint: true,
+        data: [{
+          name: 'Present',
+          y: presentCount
+        }, {
+          name: 'Absent',
+          y: absentCount
+        }]
+      }]
+    });
+  });
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+  // <![CDATA[  <-- For SVG support
+  if ('WebSocket' in window) {
+    (function () {
+      function refreshCSS() {
+        var sheets = [].slice.call(document.getElementsByTagName("link"));
+        var head = document.getElementsByTagName("head")[0];
+        for (var i = 0; i < sheets.length; ++i) {
+          var elem = sheets[i];
+          var parent = elem.parentElement || head;
+          parent.removeChild(elem);
+          var rel = elem.rel;
+          if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+          }
+          parent.appendChild(elem);
+        }
+      }
+      var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+      var address = protocol + window.location.host + window.location.pathname + '/ws';
+      var socket = new WebSocket(address);
+      socket.onmessage = function (msg) {
+        if (msg.data == 'reload') window.location.reload();
+        else if (msg.data == 'refreshcss') refreshCSS();
+      };
+      if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+        console.log('Live reload enabled.');
+        sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+      }
+    })();
+  }
+  else {
+    console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+  }
+  // ]]>
+</script>
+<script>
+  // Retrieve present and absent counts from URL query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const presentCount = urlParams.get('present');
+  const absentCount = urlParams.get('absent');
+
+  // Display present and absent counts in the respective spans
+  document.getElementById('presentCount').textContent = presentCount;
+  document.getElementById('absentCount').textContent = absentCount;
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVENTS</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url('background-image.jpg'); /* Replace 'background-image.jpg' with your image path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 20px;
+    color: #fff; /* Set text color to white */
+  }
+
+  h1 {
+    text-align: center;
+    color: #fff; /* White text color */
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .box {
+    width: 250px;
+    height: 200px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+
+  .box:hover {
+    transform: translateY(-5px);
+  }
+
+  .box-content {
+    padding: 20px;
+  }
+
+  .register-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .register-button:hover {
+    background-color: #0056b3;
+  }
+
+  #form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    display: none;
+  }
+
+  #form-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  #form-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  #form-container button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #form-container button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+  .add-symbol {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-symbol:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+<h1>EVENTS</h1>
+<div class="container" id="container">
+</div>
+
+<div id="form-container">
+  <form id="event-form">
+    <label for="name">Event Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="category">Event Category:</label>
+    <input type="text" id="category" name="category" required>
+    <label for="eligible">Eligible Students:</label>
+    <input type="text" id="eligible" name="eligible" required>
+    <label for="year">Year:</label>
+    <input type="text" id="year" name="year" required>
+    <button type="submit">Create Event</button>
+  </form>
+</div>
+
+<button class="add-symbol" onclick="showForm()">+</button>
+
+<script>
+  function showForm() {
+    document.getElementById("form-container").style.display = "block";
+  }
+
+  document.getElementById("event-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var formData = new FormData(event.target);
+    var name = formData.get("name");
+    var category = formData.get("category");
+    var eligible = formData.get("eligible");
+    var year = formData.get("year");
+    
+    createEventBox(name, category, eligible, year);
+    document.getElementById("form-container").style.display = "none";
+    event.target.reset();
+  });
+
+  function createEventBox(name, category, eligible, year) {
+    var container = document.getElementById("container");
+    var box = document.createElement("div");
+    box.classList.add("box");
+    box.innerHTML = `
+      <div class="box-content">
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Category:</strong> ${category}</p>
+        <p><strong>Eligible Students:</strong> ${eligible}</p>
+        <p><strong>Year:</strong> ${year}</p>
+        <button class="register-button" onclick="registerForEvent('${name}')">Register</button>
+      </div>
+    `;
+    container.appendChild(box);
+  }
+
+  function registerForEvent(eventName) {
+    // Implement registration functionality here, for example, showing a confirmation message
+    alert('You have registered for the event: ' + eventName);
+  }
+</script>
+</body>
+</html>
